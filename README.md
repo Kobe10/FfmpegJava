@@ -1,6 +1,6 @@
-﻿# FFmpegCommandHandler4java（FFmpeg命令执行管理器） 
+﻿# FFmpegjava（FFmpeg命令执行管理器） 
  ## 说明
- java封装的提供ffmpeg命令执行、停止、查询功能的简单管理器 
+ java封装的提供ffmpeg命令执行、停止、查询功能、监控ffmpeg是否中断，重新推流的功能的简单管理器 
  ## 版本说明 
  	1、本次更新主要针对配置文件的加载优化，详情见下面的使用说明
 	初始化FFmpegManager时会自动查找loadFFmpeg.properties配置文件
@@ -14,8 +14,9 @@
 	上个版本更新说明
  	3、增加一个String start(String id,String commond,boolean hasPath)接口，用于区分是否使用配置文件中的绝对路径，如果为false，请务必保证ffmpeg的路径可以正确加载
  	4、增加一个debug配置，用于判断是否输出关键位置的debug消息
+ 	5、增加日志输出
  ## 基于
- 本项目基于jdk1.7开发，FFmpeg各版本支持的命令请参考[FFmpeg官方文档](http://ffmpeg.org/ffmpeg.html)<br />
+ 本项目基于jdk1.8开发，FFmpeg各版本支持的命令请参考[FFmpeg官方文档](http://ffmpeg.org/ffmpeg.html)<br />
  ## 使用说明 
 ```Java 
 	 FFmpegManager manager=new FFmpegManagerImpl(10);
@@ -50,8 +51,4 @@
 	manager.stopAll();
 ```
 关于FFmpegCommandHandler接口调用/使用方式也可以参考readme文件
-
- ## 下个版本构想
-	1、提供一个新的命令组装器，支持所有ffmpeg命令的二次组装
-	2、提供一个可视化的管理/监控界面
 # FfmpegJava
