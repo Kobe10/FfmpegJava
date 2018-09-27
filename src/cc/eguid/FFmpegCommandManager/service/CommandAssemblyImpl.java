@@ -18,6 +18,7 @@ public class CommandAssemblyImpl implements  CommandAssembly{
 	 *            -返回参数：组装好的命令
 	 * @return
 	 */
+	@Override
 	public String assembly(Map<String, String> paramMap) {
 		try {
 			if (paramMap.containsKey("ffmpegPath")) {

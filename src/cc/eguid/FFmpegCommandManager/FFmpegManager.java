@@ -74,6 +74,7 @@ public interface FFmpegManager {
 	 * @return
 	 */
 	public String start(Map<String,String> assembly);
+
 	
 	/**
 	 * 停止任务

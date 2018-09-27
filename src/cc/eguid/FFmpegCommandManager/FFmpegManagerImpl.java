@@ -123,8 +123,9 @@ public class FFmpegManagerImpl implements FFmpegManager {
 				} else {
 					// 持久化信息失败，停止处理
 					taskHandler.stop(tasker.getProcess(), tasker.getThread());
-					if (config.isDebug())
+					if (config.isDebug()) {
 						System.err.println("持久化失败，停止任务！");
+					}
 				}
 			}
 		}

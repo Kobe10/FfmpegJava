@@ -101,37 +101,40 @@ public class OutHandler extends Thread {
                     if ((msg = br.readLine()) != null) {
                         if (msg.contains("Server error: Already publishing")) {
                             //重复推流
-                            logger.warn("=======【重复推流】=========");
+                            logger.debug("=======【重复推流】=========");
                             desstatus = false;
-                            if (this.isAlive()) { //结束进程
+                            //结束进程
+                            if (this.isAlive()) {
                                 destroy();
                             }
                         }
                         FFmpegManager.ffmpegStatus.put(type, "0");
-                        logger.info("【当前任务状态----" +  FFmpegManager.ffmpegStatus.get(type) + "】");
-                        logger.info("【任务流信息------" + msg + " 】");
+                        logger.debug("【当前任务状态----" + FFmpegManager.ffmpegStatus.get(type) + "】");
+                        logger.debug("【任务流信息------" + msg + " 】");
                         ohm.parse(type, msg);
                     } else {//重新启动线程
+                        logger.error("【摄像头 " + type + " 号断开连接，正在尝试重新连接】");
                         //重新启动线程需要判断当前命令的状态
                         if (FFmpegManager.ffmpegStatus.get(type) != null) {
                             if (FFmpegManager.ffmpegStatus.get(type).equals("1")) {//接口停止 不重新启动
                                 desstatus = false;
-                            }
-                            else {
-                                logger.info("【执行命令----" +  OutHandler.command + "】");
+                            } else {
+
+                                logger.info("【执行命令----" + OutHandler.command + "】");
                                 if (runtime == null) {
                                     runtime = Runtime.getRuntime();
                                 }
-                                process = runtime.exec(command);// 执行本地命令获取任务主进程
+                                // 执行本地命令获取任务主进程
+                                process = runtime.exec(command);
                                 outHandler = new OutHandler(process.getErrorStream(), type, this.ohm, command);
                                 outHandler.start();
                                 tasker = new TaskEntity(type, process, outHandler);
-                                logger.info("【重新启动一个新的线程去执行命令】");
+                                logger.debug("【重新启动一个新的线程去执行命令】");
 
                                 desstatus = false;
                             }
                         } else {
-                            logger.error("--------【未初始化】---------");
+                            logger.debug("--------【未初始化】---------");
                         }
                     }
                 }
