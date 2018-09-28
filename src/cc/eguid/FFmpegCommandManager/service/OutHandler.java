@@ -116,10 +116,10 @@ public class OutHandler extends Thread {
                         logger.error("【摄像头 " + type + " 号断开连接，正在尝试重新连接】");
                         //重新启动线程需要判断当前命令的状态
                         if (FFmpegManager.ffmpegStatus.get(type) != null) {
-                            if (FFmpegManager.ffmpegStatus.get(type).equals("1")) {//接口停止 不重新启动
+                            //接口停止 不重新启动
+                            if (FFmpegManager.ffmpegStatus.get(type).equals("1")) {
                                 desstatus = false;
                             } else {
-
                                 logger.info("【执行命令----" + OutHandler.command + "】");
                                 if (runtime == null) {
                                     runtime = Runtime.getRuntime();
@@ -130,7 +130,13 @@ public class OutHandler extends Thread {
                                 outHandler.start();
                                 tasker = new TaskEntity(type, process, outHandler);
                                 logger.debug("【重新启动一个新的线程去执行命令】");
-
+                                int ret = taskDao.add(tasker);
+                                if (ret > 0) {
+                                    logger.debug("【新增推流任务，任务Id" + tasker.getId() + "】");
+                                } else {
+                                    // 持久化信息失败，停止处理
+                                    taskHandler.stop(tasker.getProcess(), tasker.getThread());
+                                }
                                 desstatus = false;
                             }
                         } else {
@@ -166,7 +172,8 @@ public class OutHandler extends Thread {
         while ((msg = br.readLine()) != null) {
             //捕获推流错误信息  重复推流应该禁止执行命令
             System.out.println(msg);
-            if (msg.contains("failed to connect socket")) {//重复推流命令
+            //重复推流命令
+            if (msg.contains("failed to connect socket")) {
                 return "重复推流";
             }
         }

@@ -14,7 +14,9 @@ import cc.eguid.FFmpegCommandManager.entity.TaskEntity;
  * @version 2016年10月29日
  */
 public class TaskDaoImpl implements TaskDao {
-	// 存放任务信息
+	/**
+	 * 存放任务信息
+	 * */
 	private ConcurrentMap<String, TaskEntity> map = null;
 
 	public TaskDaoImpl(int size) {
